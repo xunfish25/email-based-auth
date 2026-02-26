@@ -110,5 +110,47 @@ class User {
         }
         return "Email not found.";
     }
+
+    /* GOOGLE OAUTH LOGIN */
+    public function googleLogin($email, $name, $googleId) {
+        
+        // Check if user exists
+        $stmt = $this->conn->prepare("SELECT id FROM users WHERE email = ?");
+        $stmt->bind_param("s", $email);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        
+        if ($result->num_rows === 0) {
+            // Create new user from Google OAuth
+            $stmt = $this->conn->prepare(
+                "INSERT INTO users (email, name, google_id, is_verified) 
+                 VALUES (?, ?, ?, 1)"
+            );
+            $stmt->bind_param("sss", $email, $name, $googleId);
+            
+            if (!$stmt->execute()) {
+                return false;
+            }
+        } else {
+            // Update existing user with Google ID
+            $stmt = $this->conn->prepare(
+                "UPDATE users SET google_id = ? WHERE email = ?"
+            );
+            $stmt->bind_param("ss", $googleId, $email);
+            $stmt->execute();
+        }
+        
+        // Return user data
+        $stmt = $this->conn->prepare("SELECT id, email, name FROM users WHERE email = ?");
+        $stmt->bind_param("s", $email);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        
+        if ($result->num_rows === 1) {
+            return $result->fetch_assoc();
+        }
+        
+        return false;
+    }
 }
 ?>

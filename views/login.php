@@ -70,6 +70,21 @@
         .link a:hover {
             text-decoration: underline;
         }
+        .divider {
+            text-align: center;
+            margin: 25px 0;
+            color: #999;
+        }
+        .google-login {
+            text-align: center;
+            margin-top: 15px;
+        }
+        .google-login a {
+            display: inline-block;
+        }
+        .google-login img {
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -91,6 +106,14 @@
             </div>
             <button type="submit">Login</button>
         </form>
+
+        <div class="divider">OR</div>
+
+        <div class="google-login">
+            <a href="<?php echo $login_url; ?>">
+                <img src="https://developers.google.com/identity/images/btn_google_signin_dark_normal_web.png" alt="Sign in with Google">
+            </a>
+        </div>
         
         <div class="link">
             <p>Don't have an account? <a href="index.php?action=register">Register here</a></p>

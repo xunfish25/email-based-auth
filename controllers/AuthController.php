@@ -1,6 +1,9 @@
 <?php
-require_once __DIR__ . '/../models/User.php'; // [cite: 140]
-session_start(); // [cite: 141]
+require_once __DIR__ . '/../models/User.php';
+// start session only if not already started (prevent notice when index.php has started one)
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
 class AuthController {
     private $userModel;
